@@ -1,0 +1,14 @@
+# ドライバを検索
+Get-WindowsDriver -Online | ForEach-Object { Split-Path $_.OriginalFileName -Leaf }
+#　インストールアプリを選択
+Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | ForEach-Object { $_.DisplayName }
+
+＃バイオス設定を
+Get-WmiObject -Class Win32_BIOS | Select-Object 
+
+
+if ($myArray -contains $myVar) {
+    Write-Host "The variable is in the array"
+} else {
+    Write-Host "The variable is not in the array"
+}
