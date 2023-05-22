@@ -1,14 +1,24 @@
-# ドライバを検索
-Get-WindowsDriver -Online | ForEach-Object { Split-Path $_.OriginalFileName -Leaf }
-#　インストールアプリを選択
-Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | ForEach-Object { $_.DisplayName }
-
-＃バイオス設定を
-Get-WmiObject -Class Win32_BIOS | Select-Object 
 
 
-if ($myArray -contains $myVar) {
-    Write-Host "The variable is in the array"
-} else {
-    Write-Host "The variable is not in the array"
+# 変換する文字列
+$originalString = "Hello, World!"
+
+# 文字列をバイト配列に変換
+$byteArray = [System.Text.Encoding]::UTF8.GetBytes($originalString)
+
+# バイト配列をHEX形式に変換して表示
+$hexArray = $byteArray | ForEach-Object { "{0:X2}" -f $_ }
+
+# 4バイトごとに分割して配列に格納
+$chunkSize = 4
+$hexChunks = @()
+
+for ($i = 0; $i -lt $hexArray.Length; $i += $chunkSize) {
+    $chunk = $hexArray[$i..($i + $chunkSize - 1)]
+    if ($chunk.Length -lt $chunkSize) {
+        $chunk += " " * (($chunkSize - $chunk.Length) * 2)
+    }
+    $hexChunks += $chunk -join ""
 }
+
+$hexChunks
