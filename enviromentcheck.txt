@@ -1,7 +1,6 @@
 
-
 # 変換する文字列
-$originalString = "Hello, World!"
+$originalString = "Hello, World! This is a longer string."
 
 # 文字列をバイト配列に変換
 $byteArray = [System.Text.Encoding]::UTF8.GetBytes($originalString)
@@ -10,15 +9,28 @@ $byteArray = [System.Text.Encoding]::UTF8.GetBytes($originalString)
 $hexArray = $byteArray | ForEach-Object { "{0:X2}" -f $_ }
 
 # 4バイトごとに分割して配列に格納
+
 $chunkSize = 4
 $hexChunks = @()
 
 for ($i = 0; $i -lt $hexArray.Length; $i += $chunkSize) {
     $chunk = $hexArray[$i..($i + $chunkSize - 1)]
     if ($chunk.Length -lt $chunkSize) {
-        $chunk += " " * (($chunkSize - $chunk.Length) * 2)
+        $chunk += "F" * (($chunkSize - $chunk.Length) * 2)
     }
-    $hexChunks += $chunk -join ""
+    $hexChunks += "0x" + ($chunk -join "")
 }
+Write-Output $hexChunks.Length
 
-$hexChunks
+
+
+# 4つずつの要素をまとめて1つの要素にする
+$groupedArray = @()
+
+for ($i = 0; $i -lt $hexChunks.Length; $i += 4) {
+    $group = $hexChunks[$i..($i + 3)]-join " "
+    $groupedArray += ,$group
+}
+Write-Output $groupedArray[0]
+Write-Output $groupedArray[1]
+Write-Output $groupedArray[2]
